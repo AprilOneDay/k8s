@@ -6,15 +6,20 @@ K8SVERSION=1.13.3
 DOCKERVERSION=18.06.1.ce-3.el7
 
 
-if[ ! $NAME ];then
-	echo  'plase input [ $1 ] -- 请输入[ name ]'
+if [ ! $NAME ]; then
+	echo  'error:plase input [ $1 ] -- 请输入[ name ]'
+	exit
+fi
+
+if [ ! $IPADDRESS ]; then
+	echo  'error:ipaddress not find -- ipaddress 不能为空'
 	exit
 fi
 
 echo "export K8SVERSION=${K8SVERSION}" >> /etc/profile
 
 isWget=`yum list installed | grep wget`
-if[ ! $isWget ];then
+if [ ! $isWget ]; then
 	yum install wget -y
 fi
 
