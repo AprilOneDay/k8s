@@ -8,6 +8,11 @@ DOCKERVERSION=18.06.1.ce-3.el7
 echo "export K8SVERSION=${K8SVERSION}" >> /etc/profile
 echo "export IPADDRESS=${IPADDRESS}" >> /etc/profile
 
+if[!IPADDRESS || !NAME];then
+	echo  'plase input [ ip and name ] -- 请输入[ ip 和 name]'
+	exit
+fi
+
 isWget=`yum list installed | grep wget`
 if[!isWget];then
 	yum install wget -y
