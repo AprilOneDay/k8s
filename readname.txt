@@ -1,6 +1,10 @@
 kubectl get pod --all-namespaces -o wide 
+kubectl get service -n kube-system
 kubectl get nodes
 kubectl get cs
+
+# 更新token
+kubeadm token create openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
 
 #执行
 kubeadm join --token 5fj5y2.0cl5d5y09sjqu3hu 192.168.20.236:6443
@@ -8,3 +12,25 @@ kubeadm join --token 5fj5y2.0cl5d5y09sjqu3hu 192.168.20.236:6443
 discovery.bootstrapToken: Invalid value: "": using token-based discovery without caCertHashes can be unsafe. Set unsafeSkipCAVerification to continue
 #解决 忽略错误
 kubeadm join --token 5fj5y2.0cl5d5y09sjqu3hu 192.168.20.236:6443 --discovery-token-unsafe-skip-ca-verification
+
+#安装dashboard
+kubectl create -f /k8s/dashboard/kubernetes-dashboard.yaml
+kubectl create serviceaccount dashboard-admin -n kube-system
+kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
+kubectl describe secrets -n kube-system $(kubectl -n kube-system get secret | awk '/dashboard-admin/{print $1}')
+
+mkdir key && cd key
+#生成证书
+openssl genrsa -out dashboard.key 2048 
+openssl req -new -out dashboard.csr -key dashboard.key -subj '/CN=192.168.20.236'
+openssl x509 -req -in dashboard.csr -signkey dashboard.key -out dashboard.crt
+#删除原有的证书secret
+kubectl delete secret kubernetes-dashboard-certs -n kube-system
+#创建新的证书secret
+kubectl create secret generic kubernetes-dashboard-certs --from-file=dashboard.key --from-file=dashboard.crt -n kube-system
+#查看pod
+kubectl get pod -n kube-system
+#重启pod
+kubectl delete pod <pod name> -n kube-system 
+
+kubectl delete pod kubernetes-dashboard-7d77666777-zgnnq -n kube-system 
