@@ -6,7 +6,7 @@ K8SVERSION=1.13.3
 DOCKERVERSION=18.06.1.ce-3.el7
 
 
-if[!$IPADDRESS || !$NAME];then
+if["${IPADDRESS}" == '' || "${NAME}" == ''];then
 	echo  'plase input [ ip and name ] -- 请输入[ ip 和 name]'
 	exit
 fi
@@ -16,7 +16,7 @@ echo "export IPADDRESS=${IPADDRESS}" >> /etc/profile
 
 
 isWget=`yum list installed | grep wget`
-if[!$isWget];then
+if["${isWget}" == ''];then
 	yum install wget -y
 fi
 
@@ -35,7 +35,7 @@ EOF
 
 hostnamectl --static set-hostname  ${NAME}
 
-sed -i '$a ${IPADDRESS} ${NAME}' /etc/hosts 
+sed -i "$a ${IPADDRESS} ${NAME}" /etc/hosts 
 
 systemctl disable firewalld.service 
 systemctl stop firewalld.service
