@@ -8,7 +8,11 @@ DOCKERVERSION=18.06.1.ce-3.el7
 echo "export K8SVERSION=${K8SVERSION}" >> /etc/profile
 echo "export IPADDRESS=${IPADDRESS}" >> /etc/profile
 
-yum install wget -y
+isWget=`yum list installed | grep wget`
+if[!isWget];then
+	yum install wget -y
+fi
+
 cd /etc/yum.repos.d/
 wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 
