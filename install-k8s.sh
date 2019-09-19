@@ -40,6 +40,9 @@ hostnamectl --static set-hostname  ${NAME}
 
 sed -i "$a ${IPADDRESS} ${NAME}" /etc/hosts 
 
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables 
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+
 systemctl disable firewalld.service 
 systemctl stop firewalld.service
 

@@ -1,2 +1,10 @@
-kubectl get pods --all-namespaces -o wide 
+kubectl get pod --all-namespaces -o wide 
 kubectl get nodes
+kubectl get cs
+
+#执行
+kubeadm join --token 5fj5y2.0cl5d5y09sjqu3hu 192.168.20.236:6443
+#错误
+discovery.bootstrapToken: Invalid value: "": using token-based discovery without caCertHashes can be unsafe. Set unsafeSkipCAVerification to continue
+#解决 忽略错误
+kubeadm join --token 5fj5y2.0cl5d5y09sjqu3hu 192.168.20.236:6443 --discovery-token-unsafe-skip-ca-verification
