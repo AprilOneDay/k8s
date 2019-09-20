@@ -14,7 +14,6 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 
 TOKEN=`kubeadm token list | grep authentication,signing | awk '{print $1}'`
 
-
 echo "token : ${TOKEN}"
 
 echo "IP : ${IPADDRESS}"

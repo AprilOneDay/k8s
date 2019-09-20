@@ -10,7 +10,7 @@ if [ ! $TOKEN ]; then
 fi
 
 if [ ! $MASTER_IP ]; then
-	echo  'error:plase input [ $2 ] -- 请输入[ MASTER_IP ]'
+	echo  'error:plase input [ $2 ] -- 请输入[ MASTER_IP:prot ]'
 	exit
 fi
 

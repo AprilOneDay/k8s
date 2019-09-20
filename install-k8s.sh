@@ -26,6 +26,15 @@ fi
 cd /etc/yum.repos.d/
 wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 
+# 时间核对
+isNtp=`yum list installed | grep ntp`
+if [ ! $isNtp ]; then
+	yum install ntp -y
+fi
+systemctl enable ntpd && systemctl start ntpd
+ntpdate ntp1.aliyun.com
+hwclock -w
+
 # 开启转发功能
 echo "1" > /proc/sys/net/ipv4/ip_forward
 
@@ -45,15 +54,20 @@ echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 # 设置主机名称
 hostnamectl --static set-hostname  ${NAME}
 # 修改hosts
-sed -i "$a ${IPADDRESS} ${NAME}" /etc/hosts 
+isHosts=`cat /etc/hosts | grep -w ${IPADDRESS}\ ${NAME}`
+if [ ! $isHosts ]; then
+	echo "${IPADDRESS} ${NAME}" >> /etc/hosts
+fi
+
 # 关闭防火墙
 systemctl disable firewalld.service 
 systemctl stop firewalld.service
 
+# 禁用SELINUX
 setenforce 0
-
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 
+# 关闭 swap
 swapoff -a
 
 # yum list docker-ce.x86_64 --showduplicates
