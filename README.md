@@ -10,4 +10,4 @@ chmod -R 777 /k8s
 /k8s/install-master.sh <name>
 
 # 创建node
-/k8s/install-node.sh <token> <mater_ip:port>
+/k8s/install-node.sh <token> <mater_ip:port[6443]>
