@@ -1,7 +1,5 @@
 # 下载脚本
-cd / && git clone https://github.com/AprilOneDay/k8s.git
-
-chmod -R 777 /k8s
+cd / && git clone https://github.com/AprilOneDay/k8s.git && chmod -R 777 /k8s
 
 # 安装k8s
 /k8s/install-k8s.sh <name>

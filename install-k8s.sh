@@ -69,6 +69,16 @@ sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 
 # 关闭 swap
 swapoff -a
+## 修改/etc/fstab永久关闭Swap
+cp -p /etc/fstab /etc/fstab.bak$(date '+%Y%m%d%H%M%S')
+## Redhat
+sed -i "s/\/dev\/mapper\/rhel-swap/\#\/dev\/mapper\/rhel-swap/g" /etc/fstab
+## CentOS
+sed -i "s/\/dev\/mapper\/centos-swap/\#\/dev\/mapper\/centos-swap/g" /etc/fstab
+## 修改后重新挂载全部挂载点
+mount -a
+## 查看Swap
+cat /proc/swaps
 
 # yum list docker-ce.x86_64 --showduplicates
 yum -y install docker-ce-${DOCKERVERSION}

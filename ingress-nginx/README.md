@@ -1,7 +1,7 @@
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
 
-kubectl apply -f /k8s/ingress-nginx/nginx-service.yaml
+kubectl apply -f /k8s/ingress-nginx/ingress-nginx-nodeport.yaml
 
 ```yaml
 apiVersion: v1

@@ -1,7 +1,10 @@
 kubectl get pod --all-namespaces -o wide 
-kubectl get service -n kube-system
+kubectl get svc --all-namespaces -o wide / -n kube-system
 kubectl get nodes
 kubectl get cs
+
+# 扩容
+kubectl scale deployment nginx-deployment --replicas=3 
 
 # 更新token
 kubeadm token create openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'

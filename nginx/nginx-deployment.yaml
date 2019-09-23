@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: nginx
+  template:
+    metadata:
+      labels:
+        name: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: mynginx:2.0 
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 80 
+        volumeMounts:
+        - name: html
+          mountPath: /var/www/html/
+        - name: config
+          mountPath: /etc/nginx/nginx.conf
+        - name: vhosts
+          mountPath: /etc/nginx/conf.d/
+        - name: ssl
+          mountPath: /etc/nginx/ssl/
+        - name: log
+          mountPath: /var/log/nginx/
+        env:
+        - name: NFS_ADDRESS # NFS地址
+          value: 192.168.20.236
+      volumes:
+      - name: html
+        nfs:
+          path: /nfs/src/
+          server: NFS_ADDRESS
+      - name: config
+        nfs:
+          path: /nfs/nginx/nginx.conf
+          server: NFS_ADDRESS
+      - name: vhosts
+        nfs:
+          path: /nfs/nginx/conf/conf.d/
+          server: NFS_ADDRESS
+      - name: ssl
+        nfs:
+          path: /nfs/nginx/conf/ssl/
+          server: NFS_ADDRESS
+      - name: log
+        nfs:
+          path: /nfs/nginx/log/
+          server: NFS_ADDRESS
