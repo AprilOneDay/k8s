@@ -1,7 +1,18 @@
+
+kubectl get deployment
+kubectl get rs
+
 kubectl get pod --all-namespaces -o wide 
 kubectl get svc --all-namespaces -o wide / -n kube-system
+
 kubectl get nodes
 kubectl get cs
+kubectl describe pod <pod>
+kubectl delete pods <pod> --grace-period=0 --force
+
+
+kubectl describe pod nginx-deploy-6cd8b74bcb-hrq97
+kubectl delete pods nginx-deploy --grace-period=0 --force
 
 # 扩容
 kubectl scale deployment nginx-deployment --replicas=3 
@@ -15,6 +26,12 @@ kubeadm join --token 5fj5y2.0cl5d5y09sjqu3hu 192.168.20.236:6443
 discovery.bootstrapToken: Invalid value: "": using token-based discovery without caCertHashes can be unsafe. Set unsafeSkipCAVerification to continue
 #解决 忽略错误
 kubeadm join --token 5fj5y2.0cl5d5y09sjqu3hu 192.168.20.236:6443 --discovery-token-unsafe-skip-ca-verification
+
+#错误
+pod报错"Back-off restarting failed container"
+#解决
+在deployment申明镜像的后面加上命令
+command: [ "/bin/bash", "-ce", "tail -f /dev/null" ]
 
 #安装dashboard
 kubectl create -f /k8s/dashboard/kubernetes-dashboard.yaml
@@ -72,3 +89,5 @@ vi /etc/resolv.conf
 search localdomain
 nameserver 114.114.114.114 #114DNS
 nameserver 114.114.114.115
+
+

@@ -5,14 +5,14 @@ systemctl stop  firewalld
 
 yum install -y  nfs-utils rpcbind 
 
-echo '/nfs/ *(insecure,rw,sync,no_root_squash,fsid=0)' >> /etc/exports
+echo '/k8s/ *(insecure,rw,sync,no_root_squash,fsid=0)' >> /etc/exports
 
-mkdir -p /nfs 
-chmod 777 /nfs 
+# mkdir -p /k8s 
+chmod 777 /k8s 
 
 systemctl enable rpcbind && systemctl start rpcbind
 systemctl enable nfs && systemctl start nfs
 
 # touch /nfs
 
-# chown -R nfsnobody.nfsnobody /nfs/
+# chown -R nfsnobody.nfsnobody /k8s/

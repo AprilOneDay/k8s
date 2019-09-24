@@ -14,20 +14,19 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: mynginx:2.0 
+        image: docker.io/nginx:latest
         imagePullPolicy: IfNotPresent
+        command: [ "/bin/bash", "-ce", "tail -f /dev/null" ]
         ports:
         - name: http
-          containerPort: 80 
+          containerPort: 80
+        - name: https
+          containerPort: 443
         volumeMounts:
         - name: html
           mountPath: /var/www/html/
-        - name: config
-          mountPath: /etc/nginx/nginx.conf
-        - name: vhosts
-          mountPath: /etc/nginx/conf.d/
-        - name: ssl
-          mountPath: /etc/nginx/ssl/
+        - name: conf
+          mountPath: /etc/nginx/
         - name: log
           mountPath: /var/log/nginx/
         env:
@@ -36,21 +35,32 @@ spec:
       volumes:
       - name: html
         nfs:
-          path: /nfs/src/
-          server: NFS_ADDRESS
-      - name: config
+          path: /k8s/src/
+          server: 192.168.20.236
+      - name: conf
         nfs:
-          path: /nfs/nginx/nginx.conf
-          server: NFS_ADDRESS
-      - name: vhosts
-        nfs:
-          path: /nfs/nginx/conf/conf.d/
-          server: NFS_ADDRESS
-      - name: ssl
-        nfs:
-          path: /nfs/nginx/conf/ssl/
-          server: NFS_ADDRESS
+          path: /k8s/nginx/
+          server: 192.168.20.236
       - name: log
         nfs:
-          path: /nfs/nginx/log/
-          server: NFS_ADDRESS
+          path: /k8s/nginx/log/
+          server: 192.168.20.236
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+spec:
+  selector: 
+    name: nginx
+  ports:
+  - port: 80 
+    name: http 
+    targetPort: 80 
+    protocol: TCP 
+  - port: 443 
+    name: https 
+    targetPort: 443 
+    protocol: TCP 
