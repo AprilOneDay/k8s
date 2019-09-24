@@ -39,7 +39,7 @@ spec:
           server: 192.168.20.236
       - name: conf
         nfs:
-          path: /k8s/nginx/
+          path: /k8s/nginx/src/
           server: 192.168.20.236
       - name: log
         nfs:

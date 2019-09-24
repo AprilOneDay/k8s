@@ -16,3 +16,6 @@ systemctl enable nfs && systemctl start nfs
 # touch /nfs
 
 # chown -R nfsnobody.nfsnobody /k8s/
+# 
+# 
+# docker cp nginx:/etc/nginx/ ~/nginx
